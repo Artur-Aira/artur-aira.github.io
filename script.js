@@ -198,4 +198,27 @@
     });
   });
 
+  /* ---------- Touch support for project cards ---------- */
+const projectCards = document.querySelectorAll('.project-card');
+
+projectCards.forEach((card) => {
+  card.addEventListener('click', function(e) {
+    // Если у карточки уже есть класс active — убираем
+    if (this.classList.contains('active')) {
+      this.classList.remove('active');
+    } else {
+      // Убираем active у всех остальных
+      projectCards.forEach((c) => c.classList.remove('active'));
+      this.classList.add('active');
+    }
+  });
+});
+
+// Закрываем overlay при клике в любое другое место
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.project-card')) {
+    projectCards.forEach((c) => c.classList.remove('active'));
+  }
+});
+
 })();
