@@ -208,7 +208,6 @@
   const modalDescription = document.getElementById('modalDescription');
   const modalTags = document.getElementById('modalTags');
 
-  // Данные для 6 проектов
   const projectsData = {
     1: {
       title: 'Showrun Production',
@@ -280,7 +279,6 @@
     document.body.style.overflow = '';
   }
 
-  // Открытие по клику на карточку
   document.querySelectorAll('.project-card').forEach(card => {
     card.addEventListener('click', function(e) {
       const projectId = this.dataset.project;
@@ -291,7 +289,6 @@
     });
   });
 
-  // Закрытие
   if (modalOverlay) modalOverlay.addEventListener('click', closeModal);
   if (modalClose) modalClose.addEventListener('click', closeModal);
 
