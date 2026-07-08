@@ -514,11 +514,30 @@ body {
 .project-thumb {
   aspect-ratio: 4/3; overflow: hidden; background: var(--line); margin-bottom: 16px;
 }
+.project-thumb {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: transparent; /* убрали серый фон */
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .project-thumb img {
-  width: 100%; height: 100%; object-fit: cover;
+  width: 100%;
+  height: auto;
+  object-fit: contain;    /* ← вместо cover — влезает целиком */
   filter: grayscale(100%);
   transition: filter 400ms var(--ease), transform 500ms var(--ease);
+  background: transparent; /* убрали фон */
 }
+
+.project-card:hover .project-thumb img {
+  filter: grayscale(0%);
+  transform: scale(1.03);
+}
+
 .project-card:hover .project-thumb img { filter: grayscale(0%); transform: scale(1.03); }
 
 .project-name {
