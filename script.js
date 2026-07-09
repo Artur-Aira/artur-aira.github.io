@@ -161,63 +161,65 @@
   const modalDesc   = document.getElementById('modalDescription');
   const modalTags   = document.getElementById('modalTags');
 
-  const projectsData = {
+    const projectsData = {
     1: {
       eyebrow: '01 / Showrun Production',
       title: 'Showrun Production',
       description: 'Создание POS-материалов для музыкального тура исполнителя Элджей. Разработка креативов для социальных сетей, наружной рекламы и оформление сайта компании.',
       tags: ['Тур Элджей', 'Наружная реклама', 'Сайт'],
-      image: 'assets/case_13.png'
+      images: ['assets/case_13.png']
     },
     2: {
       eyebrow: '02 / Olimpbet Fighting',
       title: 'Olimpbet Fighting',
       description: 'Полная упаковка бренда. Создание афиш, постеров, инфографики для социальных сетей и рекламных агрегаторов. Разработка обложек для видео и motion-графики для историй в социальных сетях.',
       tags: ['Брендинг', '1500+ креативов', 'Motion'],
-      image: 'assets/case_16.png'
+      images: ['assets/case_16_1.png', 'assets/case_16_2.png']
     },
     3: {
       eyebrow: '03 / ACA',
       title: 'ACA',
       description: 'Создание афиш, постеров, инфографики для социальных сетей и рекламных агрегаторов. Работа над 4 стадионными турнирами и 15+ обложками за 3 месяца.',
       tags: ['Absolute Championship Akhmat', '4 турнира', '15+ обложек'],
-      image: 'assets/case_18.png'
+      images: ['assets/case_18.png']
     },
     4: {
       eyebrow: '04 / Force Fighting',
       title: 'Force Fighting Championship',
       description: 'Создание логотипа, подбор фирменных цветов. Разработка афиш, постеров, инфографики для социальных сетей. Создание спортивной формы и POS-материалов для стадионных ивентов. 50+ креативов, 2 стадионных турнира.',
       tags: ['Логотип', 'Форма', 'Постеры', '50+ креативов'],
-      image: 'assets/case_14.png'
+      images: ['assets/case_14_1.png', 'assets/case_14_2.png']
     },
     5: {
       eyebrow: '05 / Armat Fight Show',
       title: 'Armat Fight Show',
       description: 'Полная упаковка бренда первого профессионального MMA-промоушена в Армении. Создание афиш, постеров, фирменного мерча, POS-материалов для стадионных ивентов и motion-графики для прямых эфиров в социальных сетях.',
       tags: ['Первый MMA-промоушен в Армении', 'Брендинг', 'Motion'],
-      image: 'assets/case_19.png'
+      images: ['assets/case_19.png']
     },
     6: {
       eyebrow: '06 / Другие работы',
       title: 'Другие работы',
       description: 'Разработка визуальной идентичности для бренда Lit Energy. Создание креативов для Чемпионата мира WPF × WRPF. Оформление и визуальный стиль для СМИ «Сечка».',
       tags: ['Lit Energy', 'WPF × WRPF', 'Сечка'],
-      image: 'assets/case_20.png'
+      images: ['assets/case_20.png']
     }
   };
 
   function openModal(id) {
     const data = projectsData[id];
     if (!data || !modal) return;
-    modalImage.src        = data.image;
-    modalImage.alt        = data.title;
+    currentImages = data.images || [data.image];
+    currentImageIndex = 0;
+    modalImage.alt = data.title;
     modalEyebrow.textContent = data.eyebrow;
-    modalTitle.textContent   = data.title;
-    modalDesc.textContent    = data.description;
+    modalTitle.textContent = data.title;
+    modalDesc.textContent = data.description;
     modalTags.innerHTML = data.tags.map(t => `<span>${t}</span>`).join('');
+    updateGallery();
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
-    modalClose.focus();
+    if (modalClose) modalClose.focus();
   }
 
   function closeModal() {
@@ -244,5 +246,56 @@
   if (modalOverlay) modalOverlay.addEventListener('click', closeModal);
   if (modalClose)   modalClose.addEventListener('click', closeModal);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  /* ---------- Галерея в модальном окне ---------- */
+  let currentImageIndex = 0;
+  let currentImages = [];
+
+  const modalPrev = document.getElementById('modalPrev');
+  const modalNext = document.getElementById('modalNext');
+  const modalCounter = document.getElementById('modalCounter');
+
+  function updateGallery() {
+    if (currentImages.length <= 1) {
+      modalPrev.style.display = 'none';
+      modalNext.style.display = 'none';
+      modalCounter.style.display = 'none';
+    } else {
+      modalPrev.style.display = 'flex';
+      modalNext.style.display = 'flex';
+      modalCounter.style.display = 'block';
+      modalCounter.textContent = `${currentImageIndex + 1} / ${currentImages.length}`;
+    }
+    modalImage.src = currentImages[currentImageIndex];
+  }
+
+  function nextImage() {
+    if (currentImages.length <= 1) return;
+    currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+    updateGallery();
+  }
+
+  function prevImage() {
+    if (currentImages.length <= 1) return;
+    currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+    updateGallery();
+  }
+
+  if (modalPrev) modalPrev.addEventListener('click', function(e) {
+    e.stopPropagation();
+    prevImage();
+  });
+
+  if (modalNext) modalNext.addEventListener('click', function(e) {
+    e.stopPropagation();
+    nextImage();
+  });
+
+  // Клавиши ← → для навигации
+  document.addEventListener('keydown', function(e) {
+    if (!modal.classList.contains('active')) return;
+    if (e.key === 'ArrowLeft') prevImage();
+    if (e.key === 'ArrowRight') nextImage();
+  });
 
 })();
