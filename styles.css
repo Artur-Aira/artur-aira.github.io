@@ -104,45 +104,55 @@ body {
 
 /* ---------- Header ---------- */
 .site-header {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
   padding-top: 32px;
+  padding-bottom: 16px;
   transition: transform 400ms var(--ease), background 300ms var(--ease), padding 300ms var(--ease);
+  background: transparent;
 }
+
 .site-header.scrolled {
-  padding-top: 16px; padding-bottom: 16px;
-  background: rgba(255,255,255,0.85);
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
 }
-.site-header.hide { transform: translateY(-100%); }
+
+.site-header.hide {
+  transform: translateY(-100%);
+}
 
 .header-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   height: 56px;
   position: relative;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: var(--container-margin);
 }
 
-.logo {
-  font-weight: 800;
-  font-size: 20px;
-  letter-spacing: 0.08em;
-  flex-shrink: 0;
-}
 .main-nav {
   display: flex;
-  gap: 40px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  gap: 48px;
 }
+
 .main-nav a {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   position: relative;
   padding-bottom: 4px;
+  color: var(--ink);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
+
 .main-nav a::after {
   content: '';
   position: absolute;
@@ -153,92 +163,295 @@ body {
   background: var(--ink);
   transition: width 200ms var(--ease);
 }
+
 .main-nav a:hover::after {
   width: 100%;
 }
 
+/* ---------- Бургер-меню ---------- */
 .nav-toggle {
-  display: none; flex-direction: column; gap: 5px; width: 24px;
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  width: 24px;
+  position: absolute;
+  right: var(--container-margin);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
 }
-.nav-toggle span { display: block; height: 1.5px; width: 100%; background: var(--ink); transition: transform 250ms var(--ease), opacity 250ms var(--ease); }
-.nav-toggle[aria-expanded="true"] span:first-child { transform: translateY(3.25px) rotate(45deg); }
-.nav-toggle[aria-expanded="true"] span:last-child { transform: translateY(-3.25px) rotate(-45deg); }
 
+.nav-toggle span {
+  display: block;
+  height: 1.5px;
+  width: 100%;
+  background: var(--ink);
+  transition: transform 250ms var(--ease), opacity 250ms var(--ease);
+}
+
+.nav-toggle[aria-expanded="true"] span:first-child {
+  transform: translateY(3.25px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] span:last-child {
+  transform: translateY(-3.25px) rotate(-45deg);
+}
+
+/* ---------- Мобильная навигация ---------- */
 .mobile-nav {
-  display: none; flex-direction: column; gap: 0;
-  max-height: 0; overflow: hidden; transition: max-height 350ms var(--ease);
-  background: var(--bg); border-bottom: 1px solid var(--line);
+  display: none;
+  flex-direction: column;
+  gap: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 350ms var(--ease);
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  padding-inline: var(--container-margin);
 }
-.mobile-nav.open { max-height: 300px; padding-top: 8px; padding-bottom: 24px; }
-.mobile-nav a { padding: 14px 0; font-size: 20px; font-weight: 600; border-bottom: 1px solid var(--line); }
 
+.mobile-nav.open {
+  max-height: 300px;
+  padding-top: 12px;
+  padding-bottom: 24px;
+}
+
+.mobile-nav a {
+  padding: 14px 0;
+  font-size: 18px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+.mobile-nav a:last-child {
+  border-bottom: none;
+}
+
+/* ---------- Адаптив для мобильных ---------- */
 @media (max-width: 767px) {
   .main-nav {
     display: none;
   }
+
   .nav-toggle {
     display: flex;
   }
+
   .mobile-nav {
     display: flex;
   }
-  .logo {
-    font-size: 18px;
+
+  .header-inner {
+    height: 48px;
+    justify-content: center;
   }
-  .header-inner { height: 48px; }
+
+  .site-header {
+    padding-top: 16px;
+    padding-bottom: 8px;
+  }
+
+  .site-header.scrolled {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
 }
 
 /* ---------- Hero ---------- */
 .hero {
   min-height: 100svh;
-  display: flex; flex-direction: column; justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  padding-top: 120px; padding-bottom: 80px;
-}
-.hero-inner { width: 100%; }
-.hero .eyebrow { margin-bottom: 24px; }
-.hero-title {
-  font-size: clamp(32px, 6vw, 80px);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-  max-width: 18ch;
-}
-.hero-title span { display: block; overflow: hidden; }
-.hero-sub {
-  font-size: clamp(15px, 1.4vw, 20px);
-  color: var(--ink-soft);
-  max-width: 460px;
-  margin-top: 32px;
-  line-height: 1.6;
-}
-.hero-stats {
-  display: flex; flex-wrap: wrap; gap: 28px;
-  margin-top: 48px;
-  font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-soft);
-}
-.hero-stats li {
-  position: relative; padding-right: 28px; display: flex; align-items: baseline; gap: 6px;
-}
-.hero-stats li:not(:last-child)::after {
-  content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
-  width: 1px; height: 16px; background: var(--line);
-}
-.hero-stats span {
-  font-size: 18px; font-weight: 800; color: var(--ink); text-transform: none;
+  padding-top: 80px;
+  padding-bottom: 40px;
+  background: var(--bg);
 }
 
+.hero-inner {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: var(--container-margin);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Изображение (16:9) ---------- */
+.hero-image {
+  width: 100%;
+  max-width: 1200px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg-tint);
+}
+
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------- Контент поверх изображения ---------- */
+.hero-content {
+  position: absolute;
+  bottom: 48px;
+  left: 48px;
+  z-index: 2;
+  color: var(--ink);
+}
+
+/* ---------- Заголовок ---------- */
+.hero-title {
+  font-size: clamp(32px, 5vw, 72px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  max-width: 12ch;
+  margin: 0;
+}
+
+.hero-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-line:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.hero-line:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.hero-line:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Чёрная полоса ---------- */
+.hero-divider {
+  width: 60px;
+  height: 2px;
+  background: var(--ink);
+  margin: 20px 0 12px 0;
+  opacity: 0;
+  animation: heroFadeIn 0.6s ease 0.4s forwards;
+}
+
+@keyframes heroFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ---------- Лейбл "ПОРТФОЛИО" ---------- */
+.hero-label {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 600;
+  opacity: 0;
+  animation: heroFadeIn 0.6s ease 0.5s forwards;
+}
+
+/* ---------- Убираем старые элементы ---------- */
+.hero .eyebrow,
+.hero-sub,
+.hero-stats,
 .scroll-cue {
-  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
-  width: 1px; height: 40px; background: var(--line);
+  display: none;
 }
-.scroll-cue span {
-  position: absolute; left: -2.5px; top: 0; width: 6px; height: 6px; border-radius: 50%;
-  background: var(--ink); animation: cueMove 1.8s ease-in-out infinite;
+
+/* ---------- Адаптив Hero ---------- */
+@media (max-width: 1024px) {
+  .hero-content {
+    bottom: 32px;
+    left: 32px;
+  }
+
+  .hero-title {
+    font-size: clamp(28px, 4.5vw, 52px);
+  }
 }
-@keyframes cueMove {
-  0%, 100% { top: 0; opacity: 1; }
-  50% { top: 32px; opacity: 0.3; }
+
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 60px;
+    padding-bottom: 24px;
+  }
+
+  .hero-content {
+    bottom: 24px;
+    left: 24px;
+  }
+
+  .hero-title {
+    font-size: clamp(24px, 6vw, 38px);
+    max-width: 10ch;
+  }
+
+  .hero-divider {
+    width: 40px;
+    margin: 14px 0 10px 0;
+  }
+
+  .hero-label {
+    font-size: 10px;
+  }
+
+  .hero-image {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content {
+    bottom: 16px;
+    left: 16px;
+  }
+
+  .hero-title {
+    font-size: 20px;
+    max-width: 8ch;
+  }
+
+  .hero-divider {
+    width: 30px;
+    margin: 10px 0 8px 0;
+  }
+
+  .hero-label {
+    font-size: 9px;
+  }
+
+  .hero-image {
+    aspect-ratio: 4 / 3;
+  }
 }
 
 /* ---------- Reveal animations ---------- */
@@ -886,6 +1099,15 @@ body {
   overflow-y: auto;
 }
 
+.modal-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
 .modal-title {
   font-size: clamp(24px, 3vw, 38px);
   font-weight: 700;
@@ -920,7 +1142,7 @@ body {
   color: var(--ink-soft);
 }
 
-/* ---------- Адаптив для маленьких экранов ---------- */
+/* ---------- Адаптив ---------- */
 @media (max-width: 767px) {
   .modal-content {
     aspect-ratio: auto;
@@ -992,230 +1214,4 @@ body {
     font-size: 10px;
     padding: 2px 10px;
   }
-
-  /* ============================================================
-   PROJECT MODAL (16:9)
-   ============================================================ */
-
-.project-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.project-modal.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.modal-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-}
-
-.modal-content {
-  position: relative;
-  width: 90%;
-  max-width: 1200px;
-  aspect-ratio: 16 / 9;
-  background: #fff;
-  overflow: hidden;
-  z-index: 10;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
-}
-
-.project-modal.active .modal-content {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.modal-close {
-  position: absolute;
-  top: 16px;
-  right: 20px;
-  z-index: 20;
-  background: none;
-  border: none;
-  font-size: 28px;
-  line-height: 1;
-  cursor: pointer;
-  color: #0A0A0A;
-  padding: 4px 10px;
-  transition: opacity 0.2s ease;
-}
-
-.modal-close:hover {
-  opacity: 0.5;
-}
-
-.modal-inner {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-}
-
-@media (min-width: 768px) {
-  .modal-inner {
-    flex-direction: row;
-  }
-}
-
-.modal-image {
-  flex: 1 1 50%;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  min-height: 200px;
-  overflow: hidden;
-}
-
-.modal-image img {
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-.modal-info {
-  flex: 1 1 50%;
-  padding: 32px 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow-y: auto;
-}
-
-.modal-eyebrow {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.modal-title {
-  font-size: clamp(24px, 3vw, 38px);
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
-  margin-bottom: 12px;
-  color: var(--ink);
-}
-
-.modal-description {
-  font-size: 16px;
-  line-height: 1.7;
-  color: var(--ink-soft);
-  margin-bottom: 16px;
-}
-
-.modal-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.modal-tags span {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 4px 14px;
-  background: var(--bg-tint);
-  border-radius: 20px;
-  color: var(--ink-soft);
-}
-
-@media (max-width: 767px) {
-  .modal-content {
-    aspect-ratio: auto;
-    width: 95%;
-    max-height: 90vh;
-  }
-
-  .modal-inner {
-    flex-direction: column;
-  }
-
-  .modal-image {
-    flex: 0 0 40%;
-    min-height: 160px;
-    padding: 16px;
-  }
-
-  .modal-image img {
-    max-height: 180px;
-  }
-
-  .modal-info {
-    padding: 20px 24px;
-  }
-
-  .modal-title {
-    font-size: 20px;
-  }
-
-  .modal-description {
-    font-size: 14px;
-  }
-
-  .modal-close {
-    top: 8px;
-    right: 12px;
-    font-size: 24px;
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 4px;
-  }
-}
-
-@media (max-width: 480px) {
-  .modal-image {
-    flex: 0 0 30%;
-    min-height: 120px;
-    padding: 10px;
-  }
-
-  .modal-image img {
-    max-height: 120px;
-  }
-
-  .modal-info {
-    padding: 16px 18px;
-  }
-
-  .modal-title {
-    font-size: 17px;
-    margin-bottom: 6px;
-  }
-
-  .modal-description {
-    font-size: 13px;
-    margin-bottom: 10px;
-  }
-
-  .modal-tags span {
-    font-size: 10px;
-    padding: 2px 10px;
-  }
-}
 }
