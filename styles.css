@@ -267,6 +267,8 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
   min-height: 100svh;
   background: #000;
   font-family: var(--font-main);
@@ -380,6 +382,12 @@ body {
 }
 
 /* ---------- Адаптив ---------- */
+@media (max-width: 1440px) {
+  .hero {
+    padding-inline: var(--container-margin);
+  }
+}
+
 @media (max-width: 900px) {
   .hero-nav {
     gap: 48px;
