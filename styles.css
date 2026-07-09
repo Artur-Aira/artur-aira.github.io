@@ -259,198 +259,199 @@ body {
   }
 }
 
-/* ---------- Hero ---------- */
+/* ============================================================
+   HERO BLOCK — минималистичный
+   ============================================================ */
+
 .hero {
+  position: relative;
+  width: 100%;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  position: relative;
-  padding-top: 80px;
-  padding-bottom: 40px;
-  background: var(--bg);
-}
-
-.hero-inner {
-  width: 100%;
-  max-width: 1440px;
-  margin-inline: auto;
-  padding-inline: var(--container-margin);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ---------- Изображение (16:9) ---------- */
-.hero-image {
-  width: 100%;
-  max-width: 1200px;
-  aspect-ratio: 16 / 9;
+  background: #000;
   overflow: hidden;
-  position: relative;
-  background: var(--bg-tint);
+  font-family: var(--font-main);
 }
 
-.hero-image img {
+/* ---------- Фон ---------- */
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.hero-bg img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  filter: brightness(0.7);
 }
 
-/* ---------- Контент поверх изображения ---------- */
-.hero-content {
-  position: absolute;
-  bottom: 48px;
-  left: 48px;
+/* ---------- Чёрная полоса сверху с навигацией ---------- */
+.hero-top-bar {
+  position: relative;
   z-index: 2;
-  color: var(--ink);
+  width: 100%;
+  padding: 24px 48px;
+  background: #000;
 }
 
-/* ---------- Заголовок ---------- */
+.hero-nav {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+}
+
+.hero-nav a {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+.hero-nav a:hover {
+  opacity: 0.6;
+}
+
+/* ---------- Центральный текст ---------- */
+.hero-center {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
 .hero-title {
-  font-size: clamp(32px, 5vw, 72px);
-  font-weight: 800;
-  line-height: 1.05;
+  text-align: center;
+  color: #fff;
+  font-size: clamp(32px, 6vw, 80px);
+  font-weight: 900;
+  line-height: 1.1;
   letter-spacing: -0.02em;
-  max-width: 12ch;
+  text-transform: uppercase;
+  max-width: 1200px;
   margin: 0;
 }
 
 .hero-line {
   display: block;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.hero-line:nth-child(1) {
-  animation-delay: 0.1s;
+.hero-line-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
 }
 
-.hero-line:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.hero-line:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-@keyframes heroFadeUp {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ---------- Чёрная полоса ---------- */
-.hero-divider {
+.hero-dash {
+  display: inline-block;
   width: 60px;
   height: 2px;
-  background: var(--ink);
-  margin: 20px 0 12px 0;
-  opacity: 0;
-  animation: heroFadeIn 0.6s ease 0.4s forwards;
+  background: #fff;
+  flex-shrink: 0;
 }
 
-@keyframes heroFadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+/* ---------- Нижняя часть с лейблом ---------- */
+.hero-bottom {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 20px 48px 32px;
+  display: flex;
+  justify-content: center;
 }
 
-/* ---------- Лейбл "ПОРТФОЛИО" ---------- */
 .hero-label {
-  font-size: 12px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
+  color: #fff;
+  font-size: 14px;
   font-weight: 600;
-  opacity: 0;
-  animation: heroFadeIn 0.6s ease 0.5s forwards;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.6;
 }
 
-/* ---------- Убираем старые элементы ---------- */
-.hero .eyebrow,
-.hero-sub,
-.hero-stats,
-.scroll-cue {
-  display: none;
-}
-
-/* ---------- Адаптив Hero ---------- */
+/* ---------- Адаптив ---------- */
 @media (max-width: 1024px) {
-  .hero-content {
-    bottom: 32px;
-    left: 32px;
+  .hero-nav {
+    gap: 48px;
   }
-
+  .hero-nav a {
+    font-size: 13px;
+  }
   .hero-title {
-    font-size: clamp(28px, 4.5vw, 52px);
+    font-size: clamp(28px, 5vw, 56px);
+  }
+  .hero-dash {
+    width: 40px;
   }
 }
 
 @media (max-width: 768px) {
-  .hero {
-    padding-top: 60px;
-    padding-bottom: 24px;
+  .hero-top-bar {
+    padding: 16px 24px;
   }
-
-  .hero-content {
-    bottom: 24px;
-    left: 24px;
+  .hero-nav {
+    gap: 32px;
   }
-
+  .hero-nav a {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
   .hero-title {
-    font-size: clamp(24px, 6vw, 38px);
-    max-width: 10ch;
+    font-size: clamp(22px, 4.5vw, 38px);
   }
-
-  .hero-divider {
-    width: 40px;
-    margin: 14px 0 10px 0;
+  .hero-dash {
+    width: 24px;
   }
-
+  .hero-line-wrapper {
+    gap: 12px;
+  }
+  .hero-bottom {
+    padding: 12px 24px 20px;
+  }
   .hero-label {
-    font-size: 10px;
-  }
-
-  .hero-image {
-    aspect-ratio: 4 / 3;
+    font-size: 11px;
   }
 }
 
 @media (max-width: 480px) {
-  .hero-content {
-    bottom: 16px;
-    left: 16px;
+  .hero-top-bar {
+    padding: 12px 16px;
   }
-
+  .hero-nav {
+    gap: 20px;
+  }
+  .hero-nav a {
+    font-size: 9px;
+    letter-spacing: 0.06em;
+  }
   .hero-title {
-    font-size: 20px;
-    max-width: 8ch;
+    font-size: clamp(18px, 5vw, 28px);
   }
-
-  .hero-divider {
-    width: 30px;
-    margin: 10px 0 8px 0;
+  .hero-dash {
+    width: 16px;
   }
-
+  .hero-line-wrapper {
+    gap: 8px;
+  }
+  .hero-bottom {
+    padding: 8px 16px 16px;
+  }
   .hero-label {
     font-size: 9px;
-  }
-
-  .hero-image {
-    aspect-ratio: 4 / 3;
   }
 }
 
