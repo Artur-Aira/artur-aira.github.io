@@ -1,0 +1,286 @@
+/* ============================================================
+   ARTUR AIRAPETYAN — PORTFOLIO 2026
+   ============================================================ */
+
+(() => {
+  'use strict';
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ease = 'cubic-bezier(0.16,1,0.3,1)';
+
+  /* ---------- Header: hide/show + white-on-scroll ---------- */
+  const header = document.getElementById('siteHeader');
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+
+  function updateHeader() {
+    if (!header) { ticking = false; return; }
+    const y = window.scrollY;
+    header.classList.toggle('scrolled', y > 80);
+    if (y > lastScrollY && y > 200) {
+      header.classList.add('hide');
+    } else {
+      header.classList.remove('hide');
+    }
+    lastScrollY = y;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(updateHeader); ticking = true; }
+  }, { passive: true });
+
+  /* ---------- Scroll progress bar ---------- */
+  const progressBar = document.getElementById('progressBar');
+  function updateProgress() {
+    if (!progressBar) return;
+    const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+    progressBar.style.width = Math.min(pct, 100) + '%';
+  }
+  window.addEventListener('scroll', () => requestAnimationFrame(updateProgress), { passive: true });
+  updateProgress();
+
+  /* ---------- Mobile navigation ---------- */
+  const navToggle = document.getElementById('navToggle');
+  const mobileNav = document.getElementById('mobileNav');
+
+  if (navToggle && mobileNav) {
+    navToggle.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+      navToggle.setAttribute('aria-label', isOpen ? 'Закрыть меню' : 'Открыть меню');
+    });
+    mobileNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        navToggle.setAttribute('aria-label', 'Открыть меню');
+      });
+    });
+  }
+
+  /* ---------- Custom cursor ---------- */
+  const cursorDot = document.getElementById('cursorDot');
+  const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  if (supportsHover && cursorDot) {
+    window.addEventListener('mousemove', e => {
+      cursorDot.style.left = e.clientX + 'px';
+      cursorDot.style.top  = e.clientY + 'px';
+    }, { passive: true });
+
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest('a, button, .case-figure, .project-card, .about-photo'))
+        cursorDot.classList.add('expand');
+    });
+    document.addEventListener('mouseout', e => {
+      if (e.target.closest('a, button, .case-figure, .project-card, .about-photo'))
+        cursorDot.classList.remove('expand');
+    });
+  }
+
+  /* ---------- Scroll-triggered reveals ---------- */
+  const revealTargets = document.querySelectorAll(
+    '.about-photo, .about-content, .experience-row, .case-meta, .case-title, .case-desc, .case-figure, .case-stats, .case-results, .project-card, .cta-band-text, .contact-links'
+  );
+  revealTargets.forEach(el => el.classList.add('fade-in-up'));
+
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+  revealTargets.forEach(el => revealObserver.observe(el));
+
+  /* Stagger groups */
+  function staggerGroup(selector, step) {
+    document.querySelectorAll(selector).forEach(group => {
+      Array.from(group.children).forEach((item, i) => {
+        item.style.transitionDelay = prefersReducedMotion ? '0ms' : `${i * step}ms`;
+      });
+    });
+  }
+  staggerGroup('.experience-list', 60);
+  staggerGroup('.project-grid', 80);
+  staggerGroup('.case-figures', 100);
+
+  /* ---------- Smooth anchor scroll ---------- */
+  const headerOffset = 0; // header прозрачный, не занимает места над hero
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', e => {
+      const id = anchor.getAttribute('href');
+      if (id.length <= 1) return;
+      const target = document.querySelector(id);
+      if (!target) return;
+      e.preventDefault();
+      const top = target.getBoundingClientRect().top + window.scrollY - (id === '#top' ? 0 : 80);
+      window.scrollTo({ top, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    });
+  });
+
+  /* ---------- Project Modal ---------- */
+  const modal       = document.getElementById('projectModal');
+  const modalOverlay= document.getElementById('modalOverlay');
+  const modalClose  = document.getElementById('modalClose');
+  const modalImage  = document.getElementById('modalImage');
+  const modalEyebrow= document.getElementById('modalEyebrow');
+  const modalTitle  = document.getElementById('modalTitle');
+  const modalDesc   = document.getElementById('modalDescription');
+  const modalTags   = document.getElementById('modalTags');
+  const modalPrev   = document.getElementById('modalPrev');
+  const modalNext   = document.getElementById('modalNext');
+
+    const projectsData = {
+    2: {
+      eyebrow: '02 / Olimpbet Fighting',
+      title: 'Olimpbet Fighting',
+      description: 'Полная упаковка бренда. Создание афиш, постеров, инфографики для социальных сетей и рекламных агрегаторов. Разработка обложек для видео и motion-графики для историй в социальных сетях.',
+      tags: ['Брендинг', '1500+ креативов', 'Motion'],
+      images: ['assets/case_16_1.png', 'assets/case_16_2.png']
+    },
+    3: {
+      eyebrow: '03 / ACA',
+      title: 'Absolute Championship Akhmat',
+      description: 'Создание афиш, постеров, инфографики для социальных сетей и рекламных агрегаторов. Работа над 4 стадионными турнирами и 15+ обложками за 3 месяца.',
+      tags: ['150+ креативов', '5 турниров', '20+ обложек'],
+      images: ['assets/case_18.png']
+    },
+    4: {
+      eyebrow: '04 / Force Fighting',
+      title: 'Force Fighting Championship',
+      description: 'Создание логотипа, подбор фирменных цветов. Разработка афиш, постеров, инфографики для социальных сетей. Создание спортивной формы и POS-материалов для стадионных ивентов. 50+ креативов, 2 стадионных турнира.',
+      tags: ['Логотип', 'Форма', 'Постеры', '50+ креативов'],
+      images: ['assets/case_14_1.png', 'assets/case_14_2.png']
+    },
+    5: {
+      eyebrow: '05 / Armat Fight Show',
+      title: 'Armat Fight Show',
+      description: 'Полная упаковка бренда первого профессионального MMA-промоушена в Армении. Создание афиш, постеров, фирменного мерча, POS-материалов для стадионных ивентов и motion-графики для прямых эфиров в социальных сетях.',
+      tags: ['Первый MMA-промоушен в Армении', 'Брендинг', 'Motion'],
+      images: ['assets/case_19.png']
+    },
+    6: {
+      eyebrow: '06 / Сотрудничество',
+      title: 'Бренды, выбравшие мой дизайн',
+      description: `За каждым логотипом стоит реальное сотрудничество.
+За годы работы я помогал брендам и медиа создавать сильную визуальную коммуникацию —
+от фирменного стиля и сайтов до оформления YouTube-каналов,
+мерча, рекламных материалов, полиграфии и digital-дизайна.`,
+      tags: ['Айдентика', 'Цифровой дизайн', 'Креатив'],
+
+      images: ['assets/case_20.png']
+    }
+  };
+
+    function openModal(id) {
+    const data = projectsData[id];
+    if (!data || !modal) return;
+    currentImages = data.images || [data.image];
+    currentImageIndex = 0;
+    modalImage.alt = data.title;
+    modalEyebrow.textContent = data.eyebrow;
+    modalTitle.textContent = data.title;
+    modalDesc.textContent = data.description;
+    modalTags.innerHTML = data.tags.map(t => `<span>${t}</span>`).join('');
+
+    // Показываем/скрываем полоску и стрелки
+    const hasMultiple = currentImages.length > 1;
+    if (modalGalleryBar) {
+      modalGalleryBar.style.display = hasMultiple ? 'flex' : 'none';
+    }
+    if (modalPrev) modalPrev.hidden = !hasMultiple;
+    if (modalNext) modalNext.hidden = !hasMultiple;
+
+    updateGallery();
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    if (modalClose) modalClose.focus();
+  }
+
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('click', function() {
+      openModal(this.dataset.project);
+    });
+    // Keyboard support
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openModal(this.dataset.project);
+      }
+    });
+  });
+
+  if (modalOverlay) modalOverlay.addEventListener('click', closeModal);
+  if (modalClose)   modalClose.addEventListener('click', closeModal);
+  if (modalPrev)    modalPrev.addEventListener('click', e => { e.stopPropagation(); prevImage(); });
+  if (modalNext)    modalNext.addEventListener('click', e => { e.stopPropagation(); nextImage(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+   /* ---------- Галерея в модальном окне ---------- */
+  let currentImageIndex = 0;
+  let currentImages = [];
+
+  const modalGalleryBar = document.getElementById('modalGalleryBar');
+
+  function renderDots() {
+    if (!modalGalleryBar) return;
+    const dots = modalGalleryBar.querySelectorAll('.modal-dot');
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === currentImageIndex);
+    });
+  }
+
+  function updateGallery() {
+    if (!modalImage) return;
+    modalImage.src = currentImages[currentImageIndex];
+    renderDots();
+  }
+
+  function goToImage(index) {
+    if (index < 0 || index >= currentImages.length) return;
+    currentImageIndex = index;
+    updateGallery();
+  }
+
+  function nextImage() {
+    if (currentImages.length <= 1) return;
+    currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+    updateGallery();
+  }
+
+  function prevImage() {
+    if (currentImages.length <= 1) return;
+    currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+    updateGallery();
+  }
+
+  // Обработчики для точек (полоски)
+  if (modalGalleryBar) {
+    modalGalleryBar.addEventListener('click', function(e) {
+      const dot = e.target.closest('.modal-dot');
+      if (!dot) return;
+      const index = parseInt(dot.dataset.index, 10);
+      if (!isNaN(index)) goToImage(index);
+    });
+  }
+
+  // Клавиши ← → для навигации
+  document.addEventListener('keydown', function(e) {
+    if (!modal || !modal.classList.contains('active')) return;
+    if (e.key === 'ArrowLeft') prevImage();
+    if (e.key === 'ArrowRight') nextImage();
+  });
+
+})();
