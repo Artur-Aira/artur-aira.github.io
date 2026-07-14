@@ -22,6 +22,19 @@
 </head>
 <body>
 
+<!-- INTRO LOADER: моушен-заставка, проигрывается один раз за сессию -->
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro-media">
+    <video class="intro-video" id="introVideo" muted playsinline preload="auto">
+      <source src="assets/intro-reel.mp4" type="video/mp4">
+    </video>
+    <div class="intro-placeholder" id="introPlaceholder">
+      <span class="intro-placeholder__mark">A</span>
+    </div>
+  </div>
+  <button class="intro-skip" id="introSkip" type="button">Пропустить</button>
+</div>
+
 <div class="progress-bar" id="progressBar" aria-hidden="true"></div>
 <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
@@ -81,22 +94,24 @@
         <p class="about-text">Я занимаюсь графическим дизайном, брендингом, арт-дирекшеном и веб-дизайном. Помогаю компаниям и проектам находить выразительный визуальный язык, который отражает их ценности, выделяет среди конкурентов и остается понятным для аудитории.</p>
         <p class="about-text">Мой подход основан на сочетании аналитики, внимания к деталям и творческого поиска. Считаю, что сильный дизайн — это не только эстетика, но и эффективный инструмент коммуникации и решения бизнес-задач.</p>
 
-        <p class="sr-only">Навыки: графический дизайн, брендинг, арт-дирекшен, web-дизайн, motion-дизайн.</p>
+        <p class="sr-only">Навыки: графический дизайн, брендинг, арт-дирекшен, web-дизайн, motion-дизайн, AI Creator.</p>
         <div class="skills-marquee">
           <div class="skills-marquee__track" aria-hidden="true">
             <div class="skills-marquee__group">
-              <span>Графический дизайн</span><span class="skills-marquee__dash">—</span>
-              <span>Брендинг</span><span class="skills-marquee__dash">—</span>
-              <span>Арт-дирекшен</span><span class="skills-marquee__dash">—</span>
-              <span>Web-дизайн</span><span class="skills-marquee__dash">—</span>
-              <span>Motion-дизайн</span><span class="skills-marquee__dash">—</span>
+              <span>Графический дизайн</span><span class="skills-marquee__dot">·</span>
+              <span>Брендинг</span><span class="skills-marquee__dot">·</span>
+              <span>Арт-дирекшен</span><span class="skills-marquee__dot">·</span>
+              <span>Web-дизайн</span><span class="skills-marquee__dot">·</span>
+              <span>Motion-дизайн</span><span class="skills-marquee__dot">·</span>
+              <span>AI Creator</span><span class="skills-marquee__dot">·</span>
             </div>
             <div class="skills-marquee__group">
-              <span>Графический дизайн</span><span class="skills-marquee__dash">—</span>
-              <span>Брендинг</span><span class="skills-marquee__dash">—</span>
-              <span>Арт-дирекшен</span><span class="skills-marquee__dash">—</span>
-              <span>Web-дизайн</span><span class="skills-marquee__dash">—</span>
-              <span>Motion-дизайн</span><span class="skills-marquee__dash">—</span>
+              <span>Графический дизайн</span><span class="skills-marquee__dot">·</span>
+              <span>Брендинг</span><span class="skills-marquee__dot">·</span>
+              <span>Арт-дирекшен</span><span class="skills-marquee__dot">·</span>
+              <span>Web-дизайн</span><span class="skills-marquee__dot">·</span>
+              <span>Motion-дизайн</span><span class="skills-marquee__dot">·</span>
+              <span>AI Creator</span><span class="skills-marquee__dot">·</span>
             </div>
           </div>
         </div>

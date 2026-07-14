@@ -8,6 +8,64 @@
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const ease = 'cubic-bezier(0.16,1,0.3,1)';
 
+  /* ---------- Intro loader: моушен-заставка, один раз за сессию ---------- */
+  const intro = document.getElementById('intro');
+
+  if (intro) {
+    const alreadyShown = sessionStorage.getItem('introShown') === '1';
+
+    if (alreadyShown || prefersReducedMotion) {
+      intro.remove();
+    } else {
+      sessionStorage.setItem('introShown', '1');
+      document.body.classList.add('intro-active');
+
+      const introVideo = document.getElementById('introVideo');
+      const introPlaceholder = document.getElementById('introPlaceholder');
+      const introSkip = document.getElementById('introSkip');
+      let introHidden = false;
+
+      const hideIntro = () => {
+        if (introHidden) return;
+        introHidden = true;
+        clearTimeout(maxWaitTimer);
+        intro.classList.add('intro--hidden');
+        document.body.classList.remove('intro-active');
+        intro.addEventListener('transitionend', function onEnd(e) {
+          if (e.target !== intro) return;
+          intro.removeEventListener('transitionend', onEnd);
+          intro.remove();
+        });
+        setTimeout(() => { if (intro.parentNode) intro.remove(); }, 1200);
+      };
+
+      // Подстраховка: если видео долго грузится/играет — не держим сайт закрытым дольше 6с
+      const maxWaitTimer = setTimeout(hideIntro, 6000);
+      let videoFailed = false;
+
+      const onVideoUnavailable = () => {
+        if (videoFailed || introVideo.classList.contains('is-ready')) return;
+        videoFailed = true;
+        setTimeout(hideIntro, 1600);
+      };
+
+      introVideo.addEventListener('loadeddata', () => {
+        introVideo.classList.add('is-ready');
+        if (introPlaceholder) introPlaceholder.style.opacity = '0';
+        introVideo.play().catch(hideIntro);
+      });
+      introVideo.addEventListener('ended', hideIntro);
+      // Файл видео ещё не добавлен на сайт (или не загрузился) — показываем заставку и уходим на сайт
+      introVideo.addEventListener('error', onVideoUnavailable);
+      introVideo.addEventListener('stalled', onVideoUnavailable);
+      setTimeout(() => {
+        if (introVideo.readyState === 0) onVideoUnavailable();
+      }, 1200);
+
+      if (introSkip) introSkip.addEventListener('click', hideIntro);
+    }
+  }
+
   /* ---------- Header: прячется при скролле вниз, появляется при скролле вверх ---------- */
   const header = document.getElementById('siteHeader');
   let lastScrollY = window.scrollY;
